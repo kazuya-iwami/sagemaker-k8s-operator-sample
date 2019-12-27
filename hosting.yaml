@@ -1,0 +1,19 @@
+apiVersion: sagemaker.aws.amazon.com/v1
+kind: HostingDeployment
+metadata:
+  name: pytorch-cifar10-hosting
+spec:
+    region: ap-northeast-1
+    productionVariants:
+        - variantName: AllTraffic
+          modelName: pytorch-cifar10-model
+          initialInstanceCount: 1
+          instanceType: ml.t2.medium
+          initialVariantWeight: 1
+    models:
+        - name: pytorch-cifar10-model
+          executionRoleArn: arn:aws:iam::123456789012:role/service-role/AmazonSageMaker-ExecutionRole
+          containers:
+              - containerHostname: pytorch-cifar10
+                modelDataUrl: s3://sagemaker-ap-northeast-1-123456789012/data/hoge/model.tar.gz
+                image: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/pytorch-cifar10:latest

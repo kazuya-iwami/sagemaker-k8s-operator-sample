@@ -1,0 +1,25 @@
+apiVersion: sagemaker.aws.amazon.com/v1
+kind: TrainingJob
+metadata:
+  name: pytorch-cifar10-training
+spec:
+    algorithmSpecification:
+        trainingImage: 123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/pytorch-cifar10:latest
+        trainingInputMode: File
+    roleArn: arn:aws:iam::123456789012:role/service-role/AmazonSageMaker-ExecutionRole
+    region: ap-northeast-1
+    outputDataConfig:
+        s3OutputPath: s3://sagemaker-ap-northeast-1-123456789012/
+    resourceConfig:
+        instanceCount: 1
+        instanceType: ml.m4.xlarge
+        volumeSizeInGB: 10
+    stoppingCondition:
+        maxRuntimeInSeconds: 86400
+    inputDataConfig:
+        - channelName: training
+          dataSource:
+            s3DataSource:
+                s3DataType: S3Prefix
+                s3Uri: s3://sagemaker-ap-northeast-1-123456789012/pytorch-cifar10
+                s3DataDistributionType: FullyReplicated
